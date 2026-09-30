@@ -20,6 +20,7 @@
   "files": ["dist", "schema", "SPECIFICATION.md", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsup",
+    "prepare": "npm run build",
     "check": "tsc --noEmit",
     "test": "npm run build && node --test tests/*.test.mjs",
     "validate:examples": "npm run build && node dist/cli.js validate examples/voltage-divider.json examples/rc-low-pass.json",
