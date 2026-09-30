@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opencircuitlabs.github.io/circuit-format/schema/v1/circuit.schema.json",
+  "title": "OpenCircuit Circuit Document 1.0",
+  "description": "Portable electronic circuit data using SI units.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "metadata", "ground", "nodes", "components"],
+  "properties": {
+    "format": { "const": "opencircuit" },
+    "version": { "const": "1.0" },
+    "metadata": { "$ref": "#/$defs/metadata" },
+    "ground": { "$ref": "#/$defs/id" },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$" },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "author": { "type": "string", "maxLength": 200 },
+        "license": { "type": "string", "maxLength": 100 },
+        "created": { "type": "string", "format": "date-time" },
+        "modified": { "type": "string", "format": "date-time" },
+        "tags": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 50 } }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "maxLength": 200 },
+        "position": { "$ref": "#/$defs/position" }
+      }
+    },
+    "component": {
+      "oneOf": [
+        { "$ref": "#/$defs/resistor" },
+        { "$ref": "#/$defs/voltageSource" },
+        { "$ref": "#/$defs/currentSource" },
+        { "$ref": "#/$defs/switch" },
+        { "$ref": "#/$defs/capacitor" },
+        { "$ref": "#/$defs/inductor" },
+        { "$ref": "#/$defs/diode" },
+        { "$ref": "#/$defs/led" },
+        { "$ref": "#/$defs/lamp" }
+      ]
+    },
+    "resistor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "resistance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "resistor" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "resistance": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "voltageSource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "voltage"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "voltage-source" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "voltage": { "type": "number" }
+      }
+    },
+    "currentSource": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "current"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "current-source" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "current": { "type": "number" }
+      }
+    },
+    "switch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "closed"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "switch" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "closed": { "type": "boolean" }, "onResistance": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "capacitor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "capacitance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "capacitor" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "capacitance": { "type": "number", "exclusiveMinimum": 0 }, "initialVoltage": { "type": "number" }
+      }
+    },
+    "inductor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "inductance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "inductor" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "inductance": { "type": "number", "exclusiveMinimum": 0 }, "initialCurrent": { "type": "number" }
+      }
+    },
+    "diode": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "diode" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "model": { "type": "string", "minLength": 1 }, "forwardVoltage": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "led": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "led" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "color": { "type": "string", "minLength": 1 }, "forwardVoltage": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "lamp": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "resistance"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "type": { "const": "lamp" },
+        "from": { "$ref": "#/$defs/id" }, "to": { "$ref": "#/$defs/id" },
+        "label": { "type": "string" }, "position": { "$ref": "#/$defs/position" }, "rotation": { "enum": [0, 90, 180, 270] },
+        "resistance": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "format": "opencircuit",
+  "version": "1.0",
+  "metadata": {
+    "name": "RC low-pass filter",
+    "description": "A first-order low-pass filter with a 1 kHz cutoff.",
+    "license": "CC0-1.0",
+    "tags": ["ac", "filter", "rc"]
+  },
+  "ground": "0",
+  "nodes": [
+    { "id": "0", "label": "Ground" },
+    { "id": "in", "label": "Input" },
+    { "id": "out", "label": "Output" }
+  ],
+  "components": [
+    { "id": "V1", "type": "voltage-source", "from": "in", "to": "0", "voltage": 1 },
+    { "id": "R1", "type": "resistor", "from": "in", "to": "out", "resistance": 1000 },
+    { "id": "C1", "type": "capacitor", "from": "out", "to": "0", "capacitance": 1.5915494309189535e-7 }
+  ],
+  "extensions": {
+    "org.opencircuitlabs.analysis": {
+      "type": "ac-sweep",
+      "startFrequency": 10,
+      "stopFrequency": 100000
+    }
+  }
+}

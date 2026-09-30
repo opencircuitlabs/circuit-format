@@ -1,0 +1,21 @@
+{
+  "format": "opencircuit",
+  "version": "1.0",
+  "metadata": {
+    "name": "10 V voltage divider",
+    "description": "Two equal resistors produce a 5 V output.",
+    "license": "CC0-1.0",
+    "tags": ["dc", "beginner", "voltage-divider"]
+  },
+  "ground": "0",
+  "nodes": [
+    { "id": "0", "label": "Ground", "position": { "x": 100, "y": 300 } },
+    { "id": "vcc", "label": "+10 V", "position": { "x": 100, "y": 100 } },
+    { "id": "out", "label": "Output", "position": { "x": 400, "y": 200 } }
+  ],
+  "components": [
+    { "id": "V1", "type": "voltage-source", "from": "vcc", "to": "0", "voltage": 10, "position": { "x": 100, "y": 200 }, "rotation": 90 },
+    { "id": "R1", "type": "resistor", "from": "vcc", "to": "out", "resistance": 1000, "position": { "x": 300, "y": 100 } },
+    { "id": "R2", "type": "resistor", "from": "out", "to": "0", "resistance": 1000, "position": { "x": 400, "y": 300 }, "rotation": 90 }
+  ]
+}

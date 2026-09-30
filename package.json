@@ -1,0 +1,44 @@
+{
+  "name": "@opencircuitlabs/circuit-format",
+  "version": "0.1.0",
+  "description": "A versioned, portable JSON format for electronic circuits.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./schema/v1": "./schema/v1/circuit.schema.json"
+  },
+  "bin": {
+    "circuit-format": "./dist/cli.js"
+  },
+  "files": ["dist", "schema", "SPECIFICATION.md", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup",
+    "check": "tsc --noEmit",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "validate:examples": "npm run build && node dist/cli.js validate examples/voltage-divider.json examples/rc-low-pass.json",
+    "prepublishOnly": "npm run check && npm test && npm run validate:examples"
+  },
+  "keywords": ["circuit", "electronics", "json-schema", "eda", "netlist"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opencircuitlabs/circuit-format.git"
+  },
+  "bugs": { "url": "https://github.com/opencircuitlabs/circuit-format/issues" },
+  "homepage": "https://github.com/opencircuitlabs/circuit-format#readme",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "overrides": { "esbuild": "^0.28.1" },
+  "devDependencies": {
+    "@types/node": "^22.18.6",
+    "ajv": "^8.17.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  }
+}
